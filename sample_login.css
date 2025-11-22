@@ -1,0 +1,19 @@
+.signup-form {
+    display: none;
+}
+
+.login-form {
+    display: block;
+}
+
+.verification-form {
+    display: none;
+}
+
+.forgot-password-form {
+    display: none;
+}
+
+.change-password-form {
+    display: none;
+}
