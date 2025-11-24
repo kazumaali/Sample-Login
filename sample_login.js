@@ -32,7 +32,7 @@ loginForm.addEventListener("submit", function(e) {
         message.textContent = "لا وجود لهذا المستخدم!"
         message.style.backgroundColor = "red";
         message.style.color = "white";
-    }
+    };
     
     if(user.password !== passwordLogInput.value){
         console.error('Incorrect Password!');
