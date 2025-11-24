@@ -32,7 +32,6 @@ loginForm.addEventListener("submit", function(e) {
         message.textContent = "لا وجود لهذا المستخدم!"
         message.style.backgroundColor = "red";
         message.style.color = "white";
-        return;
     }
     
     if(user.password !== passwordLogInput.value){
@@ -40,7 +39,6 @@ loginForm.addEventListener("submit", function(e) {
         message.textContent = 'كلمة مرور خاطئة!';
         message.style.backgroundColor = 'red';
         message.style.color = 'white';
-        return;
     };
     
     console.log('Login Successfully');
@@ -72,7 +70,6 @@ forgotPasswordBtn.addEventListener("click", function(e){
     message.textContent = "أدخل بريدك الإلكتروني أولا";
     message.style.backgroundColor = "red";
     message.style.color = "white";
-    return;
   }
   
   sessionStorage.setItem('resetPasswordEmail', emailLogInput.value);
@@ -206,7 +203,6 @@ verificationForm.addEventListener("submit", function(e){
             message.textContent = 'المستخدم موجود بالفعل!';
             message.style.backgroundColor = 'red';
             message.style.color = 'white';
-            return;
         };
         
         existingUsers.push(userData);
@@ -264,7 +260,6 @@ changePasswordForm.addEventListener("submit", function(e){
         message.textContent = "على كلمة المرور أن تحتوي على الحروف اللاتينية، أو الأرقام 1-9، أو $. وأن يحتوي على الأقل على 6 عناصر."
         message.style.backgroundColor = "red";
         message.style.color = "white";
-        return;
     }
     
     
@@ -275,7 +270,6 @@ changePasswordForm.addEventListener("submit", function(e){
         message.textContent = "خطأ في عملية إعادة تعيين كلمة المرور!";
         message.style.backgroundColor = "red";
         message.style.color = "white";
-        return;
     }
     
     // Get users from localStorage
@@ -289,7 +283,6 @@ changePasswordForm.addEventListener("submit", function(e){
         message.textContent = "المستخدم غير موجود!";
         message.style.backgroundColor = "red";
         message.style.color = "white";
-        return;
     }
     
     // Update the user's password
