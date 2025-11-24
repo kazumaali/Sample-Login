@@ -10,7 +10,7 @@ const passwordInput = document.getElementById("passwordInput");
 const repeatPasswordInput = document.getElementById("repeatPasswordInput");
 const verificationForm = document.getElementById("verificationForm");
 const verificationInput = document.getElementById("verificationInput");
-const loginRedirectBtn = document.getElementById("loginRedirectBtn")
+const loginRedirectBtn = document.getElementById("loginRedirectBtn");
 const signupRedirectBtn = document.getElementById("signupRedirectBtn");
 const resendCodeBtn = document.getElementById("resendCodeBtn");
 const forgotPasswordBtn = document.getElementById("forgotPasswordBtn");
@@ -29,7 +29,7 @@ loginForm.addEventListener("submit", function(e) {
     
     if(!user){
         console.error("User Does Not Exist!");
-        message.textContent = "لا وجود لهذا المستخدم!"
+        message.textContent = "لا وجود لهذا المستخدم";
         message.style.backgroundColor = "red";
         message.style.color = "white";
     };
@@ -70,7 +70,7 @@ forgotPasswordBtn.addEventListener("click", function(e){
     message.textContent = "أدخل بريدك الإلكتروني أولا";
     message.style.backgroundColor = "red";
     message.style.color = "white";
-  }
+  };
   
   sessionStorage.setItem('resetPasswordEmail', emailLogInput.value);
   const verificationCode = Math.floor(100000 + Math.random() * 900000);
@@ -105,34 +105,34 @@ signupForm.addEventListener("submit", function(e) {
     if (!/^[A-Za-z0-9_$]+$/.test(nameInput.value)) {
         console.error("Invalid Username!");
         hasError = true;
-        message.textContent = "صيغة خاطئة! على إسم المستخدم أن يحتوي على حروف لاتينية، أو الأرقام من 1-9 ، أو _، أو $. وأن يحتوي بين 3 إلى 16 عنصرا."
+        message.textContent = "صيغة خاطئة! على إسم المستخدم أن يحتوي على حروف لاتينية، أو الأرقام من 1-9 ، أو _، أو $. وأن يحتوي بين 3 إلى 16 عنصرا.";
         message.style.backgroundColor = "red";
         message.style.color = "white";
-    }
+    };
     
     if(!emailInput.checkValidity()){
         console.error("Invalid Email Address!");
         hasError = true;
-        message.textContent = "عنوان بريد إلكترونيٍّ خاطئ!"
+        message.textContent = "عنوان بريد إلكترونيٍّ خاطئ!";
         message.style.backgroundColor = "red";
         message.style.color = "white";
-    }
+    };
     
     if(!passwordInput.checkValidity()){
         console.error("Invalid Password Shape!");
         hasError = true;
-        message.textContent = "على كلمة المرور أن تحتوي على الحروف اللاتينية، أو الأرقام 1-9، أو $. وأن يحتوي على الأقل على 6 عناصر."
+        message.textContent = "على كلمة المرور أن تحتوي على الحروف اللاتينية، أو الأرقام 1-9، أو $. وأن يحتوي على الأقل على 6 عناصر.";
         message.style.backgroundColor = "red";
         message.style.color = "white";
-    }
+    };
     
     if(passwordInput.value !== repeatPasswordInput.value){
         console.error("Passwords Do Not Match!");
         hasError = true;
-        message.textContent = "كلمتا المرور ليستا متطابقتين!"
+        message.textContent = "كلمتا المرور ليستا متطابقتين!";
         message.style.backgroundColor = "red";
         message.style.color = "white";
-    }
+    };
     
     if(!hasError){
       
@@ -147,22 +147,22 @@ signupForm.addEventListener("submit", function(e) {
         user_name: nameInput.value
       };
       
-      emailjs.sendForm("service_0ias34f", "template_z6biz19", this)
+      emailjs.sendForm("service_0ias34f", "template_z6biz19", this);
       
       .then(() => {
         alert("تم إرسال رمز التأكيد إليك. رجاءاً تفقد بريدك الإلكتروني.");
         verificationForm.style.display = 'block';
         signupForm.style.display = 'none';
         
-      })
+      });
       
       .catch((error) => {
         console.error("EmailJS Error:",error);
-        alert('فشل الإرسال! رجاءاً إضغط على "إعادة الإرسال".')
+        alert('فشل الإرسال! رجاءاً إضغط على "إعادة الإرسال".');
         
       });
       
-    }
+    };
     
 });
 
@@ -225,7 +225,7 @@ verificationForm.addEventListener("submit", function(e){
         setTimeout(() => {
             window.location.href = 'index.html';
         }, 2000);
-    }
+    };
     
 });
 
@@ -242,8 +242,7 @@ forgotPasswordForm.addEventListener("submit", function(e) {
     message.textContent = "رمز تأكيد خاطئ!";
     message.style.backgroundColor = "red";
     message.style.color = "white";
-    return;
-  }
+  };
   
   console.log("Redirected to changePasswordForm");
   
@@ -257,10 +256,10 @@ changePasswordForm.addEventListener("submit", function(e){
     
     if(!changePasswordInput.checkValidity()){
         console.error("Invalid Password Shape!");
-        message.textContent = "على كلمة المرور أن تحتوي على الحروف اللاتينية، أو الأرقام 1-9، أو $. وأن يحتوي على الأقل على 6 عناصر."
+        message.textContent = "على كلمة المرور أن تحتوي على الحروف اللاتينية، أو الأرقام 1-9، أو $. وأن يحتوي على الأقل على 6 عناصر.";
         message.style.backgroundColor = "red";
         message.style.color = "white";
-    }
+    };
     
     
     const userEmail = sessionStorage.getItem('resetPasswordEmail');
@@ -270,7 +269,7 @@ changePasswordForm.addEventListener("submit", function(e){
         message.textContent = "خطأ في عملية إعادة تعيين كلمة المرور!";
         message.style.backgroundColor = "red";
         message.style.color = "white";
-    }
+    };
     
     // Get users from localStorage
     const users = JSON.parse(localStorage.getItem('users')) || [];
@@ -283,7 +282,7 @@ changePasswordForm.addEventListener("submit", function(e){
         message.textContent = "المستخدم غير موجود!";
         message.style.backgroundColor = "red";
         message.style.color = "white";
-    }
+    };
     
     // Update the user's password
     users[userIndex].password = changePasswordInput.value;
@@ -325,17 +324,15 @@ resendCodeBtn.addEventListener("click", function(e){
   };
   
   emailjs.sendForm("service_0ias34f", "template_z6biz19", this)
-  
   .then(() => {
     
     alert("تم إرسال رمز التأكيد إليك. رجاءاً تفقد بريدك الإلكتروني.");
     
   })
-  
   .catch((error) => {
     
     console.error("EmailJS Error:",error);
-    alert('فشل الإرسال! رجاءاً إضغط على "إعادة الإرسال".')
+    alert('فشل الإرسال! رجاءاً إضغط على "إعادة الإرسال".');
     
   });
   
