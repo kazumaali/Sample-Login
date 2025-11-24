@@ -10,7 +10,7 @@ const passwordInput = document.getElementById("passwordInput");
 const repeatPasswordInput = document.getElementById("repeatPasswordInput");
 const verificationForm = document.getElementById("verificationForm");
 const verificationInput = document.getElementById("verificationInput");
-const loginRedirectBtn = document.getElementById("loginRedirectBtn");
+const loginRedirectBtn = document.getElementById("loginRedirectBtn")
 const signupRedirectBtn = document.getElementById("signupRedirectBtn");
 const resendCodeBtn = document.getElementById("resendCodeBtn");
 const forgotPasswordBtn = document.getElementById("forgotPasswordBtn");
@@ -18,7 +18,6 @@ const forgotPasswordForm = document.getElementById("forgotPasswordForm");
 const forgotPasswordInput = document.getElementById("forgotPasswordInput");  
 const changePasswordForm = document.getElementById("changePasswordForm");
 const changePasswordInput = document.getElementById("changePasswordInput");
-const resendCodeBtn = document.getElementById("resendCodeBtn");
 
 loginForm.addEventListener("submit", function(e) {
     
@@ -29,16 +28,18 @@ loginForm.addEventListener("submit", function(e) {
     
     if(!user){
         console.error("User Does Not Exist!");
-        message.textContent = "لا وجود لهذا المستخدم";
+        message.textContent = "لا وجود لهذا المستخدم!"
         message.style.backgroundColor = "red";
         message.style.color = "white";
-    };
+        return;
+    }
     
     if(user.password !== passwordLogInput.value){
         console.error('Incorrect Password!');
         message.textContent = 'كلمة مرور خاطئة!';
         message.style.backgroundColor = 'red';
         message.style.color = 'white';
+        return;
     };
     
     console.log('Login Successfully');
@@ -55,44 +56,33 @@ loginForm.addEventListener("submit", function(e) {
 });
 
 signupRedirectBtn.addEventListener("click", function(e) {
-  e.preventDefault();
   signupForm.style.display = 'block';
   loginForm.style.display = 'none';
   
 });
 
 forgotPasswordBtn.addEventListener("click", function(e){
-  
-  e.preventDefault();
-  
-  if(!emailLogInput.value){
-    console.error("Enter Email Address First!");
-    message.textContent = "أدخل بريدك الإلكتروني أولا";
-    message.style.backgroundColor = "red";
-    message.style.color = "white";
-  };
-  
   sessionStorage.setItem('resetPasswordEmail', emailLogInput.value);
   const verificationCode = Math.floor(100000 + Math.random() * 900000);
   sessionStorage.setItem('verificationCode', verificationCode);
-  
-  console.log("Verification code created", verificationCode);
-  
   const templateParams = {
-    verification_code: verificationCode,
-    to_email: emailLogInput.value
+    verification_code: verificationCode
+    
   };
-  
-  emailjs.send("service_0ias34f","template_z6biz19",templateParams)
+  emailjs.sendForm("service_0ias34f", "template_z6biz19", this)
   .then(() => {
-    alert('تم إرسال رمز التأكيد إليك. رجاءاً تفقد صندوق بريدك الإلكتروني');
-    forgotPasswordForm.style.display = 'block';
-    loginForm.style.display = 'none';
+    
+    alert("تم إرسال رمز التأكيد إليك. رجاءاً تفقد بريدك الإلكتروني.");
+    
   })
   .catch((error) => {
-    console.error("EmailJs Error:", error);
-    alert("فشل الإرسال رمز التأكيد! رجاءاً حاول مجددا.");
+    console.error(error);
+    alert('فشل الإرسال! رجاءاً إضغط على "إعادة الإرسال".')
+    
   });
+  
+  forgotPasswordForm.style.display = 'block';
+  loginForm.style.display = 'none';
   
 });
 
@@ -105,70 +95,60 @@ signupForm.addEventListener("submit", function(e) {
     if (!/^[A-Za-z0-9_$]+$/.test(nameInput.value)) {
         console.error("Invalid Username!");
         hasError = true;
-        message.textContent = "صيغة خاطئة! على إسم المستخدم أن يحتوي على حروف لاتينية، أو الأرقام من 1-9 ، أو _، أو $. وأن يحتوي بين 3 إلى 16 عنصرا.";
+        message.textContent = "صيغة خاطئة! على إسم المستخدم أن يحتوي على حروف لاتينية، أو الأرقام من 1-9 ، أو _، أو $. وأن يحتوي بين 3 إلى 16 عنصرا."
         message.style.backgroundColor = "red";
         message.style.color = "white";
-    };
+    }
     
     if(!emailInput.checkValidity()){
         console.error("Invalid Email Address!");
         hasError = true;
-        message.textContent = "عنوان بريد إلكترونيٍّ خاطئ!";
+        message.textContent = "عنوان بريد إلكترونيٍّ خاطئ!"
         message.style.backgroundColor = "red";
         message.style.color = "white";
-    };
+    }
     
     if(!passwordInput.checkValidity()){
         console.error("Invalid Password Shape!");
         hasError = true;
-        message.textContent = "على كلمة المرور أن تحتوي على الحروف اللاتينية، أو الأرقام 1-9، أو $. وأن يحتوي على الأقل على 6 عناصر.";
+        message.textContent = "على كلمة المرور أن تحتوي على الحروف اللاتينية، أو الأرقام 1-9، أو $. وأن يحتوي على الأقل على 6 عناصر."
         message.style.backgroundColor = "red";
         message.style.color = "white";
-    };
+    }
     
     if(passwordInput.value !== repeatPasswordInput.value){
         console.error("Passwords Do Not Match!");
         hasError = true;
-        message.textContent = "كلمتا المرور ليستا متطابقتين!";
+        message.textContent = "كلمتا المرور ليستا متطابقتين!"
         message.style.backgroundColor = "red";
         message.style.color = "white";
-    };
-    
-    if(!hasError){
+    }
+
+  if(!hasError){
       
       const verificationCode = Math.floor(100000 + Math.random() * 900000);
       sessionStorage.setItem('verificationCode', verificationCode);
       
-      console.log("Signup verification code", verificationCode);
-      
       const templateParams = {
-        verification_code: verificationCode,
-        to_email: emailInput.value,
-        user_name: nameInput.value
+          verification_code: verificationCode
       };
       
-      emailjs.sendForm("service_0ias34f", "template_z6biz19", this);
+      emailjs.sendForm("service_0ias34f", "template_z6biz19", this)
+    .then(() => {
+      alert("تم إرسال رمز التأكيد إليك. رجاءاً تفقد بريدك الإلكتروني.");
+    })
+    .catch((error) => {
+      console.error(error);
+      alert('فشل الإرسال! رجاءاً إضغط على "إعادة الإرسال".')
+    });
       
-      .then(() => {
-        alert("تم إرسال رمز التأكيد إليك. رجاءاً تفقد بريدك الإلكتروني.");
-        verificationForm.style.display = 'block';
-        signupForm.style.display = 'none';
-        
-      });
-      
-      .catch((error) => {
-        console.error("EmailJS Error:",error);
-        alert('فشل الإرسال! رجاءاً إضغط على "إعادة الإرسال".');
-        
-      });
-      
-    };
+      verificationForm.style.display = 'block';
+      signupForm.style.display = 'none';
+  }
     
 });
 
 loginRedirectBtn.addEventListener ("click", function(e) {
-  
-  e.preventDefault();
   signupForm.style.display = 'none';
   loginForm.style.display = 'block';
   
@@ -179,7 +159,6 @@ verificationForm.addEventListener("submit", function(e){
     e.preventDefault();
     
     const storedCode = sessionStorage.getItem('verificationCode');
-    console.log('stored code', storedCode, 'Entered code', verificationInput.value);
     
     if(verificationInput.value !== storedCode){
         console.error('Invalid Verification Code!');
@@ -203,6 +182,7 @@ verificationForm.addEventListener("submit", function(e){
             message.textContent = 'المستخدم موجود بالفعل!';
             message.style.backgroundColor = 'red';
             message.style.color = 'white';
+            return;
         };
         
         existingUsers.push(userData);
@@ -217,6 +197,35 @@ verificationForm.addEventListener("submit", function(e){
         repeatPasswordInput.value = '';
         verificationInput.value = '';
         
+        resendCodeBtn.addEventListener("click", function(e){
+          
+          const verificationCode = Math.floor(100000 + Math.random() * 900000);
+          
+          sessionStorage.setItem('verificationCode', verificationCode);
+          
+          const templateParams = {
+            verification_code: verificationCode
+            
+          };
+          
+          emailjs.sendForm("service_0ias34f", "template_z6biz19", this)
+          
+          .then(() => {
+            
+            alert("تم إرسال رمز التأكيد إليك. رجاءاً تفقد بريدك الإلكتروني.");
+            
+          })
+          
+          .catch((error) => {
+            
+            console.error(error);
+            
+            alert('فشل الإرسال! رجاءاً إضغط على "إعادة الإرسال".')
+            
+          });
+          
+        });
+        
         console.log('Account Created Successfully🎉');
         message.textContent = 'تم إنشاء الحساب بنجاح🎉';
         message.style.backgroundColor = 'green';
@@ -225,7 +234,7 @@ verificationForm.addEventListener("submit", function(e){
         setTimeout(() => {
             window.location.href = 'index.html';
         }, 2000);
-    };
+    }
     
 });
 
@@ -234,7 +243,6 @@ forgotPasswordForm.addEventListener("submit", function(e) {
   e.preventDefault();
   
   const storedCode = sessionStorage.getItem('verificationCode');
-  console.log("Forgot password - Stored:", storedCode, "Entered:", forgotPasswordInput.value);
   
   if(forgotPasswordInput.value !== storedCode) {
     
@@ -242,7 +250,8 @@ forgotPasswordForm.addEventListener("submit", function(e) {
     message.textContent = "رمز تأكيد خاطئ!";
     message.style.backgroundColor = "red";
     message.style.color = "white";
-  };
+    
+  }
   
   console.log("Redirected to changePasswordForm");
   
@@ -256,12 +265,14 @@ changePasswordForm.addEventListener("submit", function(e){
     
     if(!changePasswordInput.checkValidity()){
         console.error("Invalid Password Shape!");
-        message.textContent = "على كلمة المرور أن تحتوي على الحروف اللاتينية، أو الأرقام 1-9، أو $. وأن يحتوي على الأقل على 6 عناصر.";
+        message.textContent = "على كلمة المرور أن تحتوي على الحروف اللاتينية، أو الأرقام 1-9، أو $. وأن يحتوي على الأقل على 6 عناصر."
         message.style.backgroundColor = "red";
         message.style.color = "white";
-    };
+        return;
+    }
     
-    
+    // Get the current user's email (you'll need to store this somewhere)
+    // For forgot password flow, you might need to store the email in sessionStorage
     const userEmail = sessionStorage.getItem('resetPasswordEmail');
     
     if (!userEmail) {
@@ -269,7 +280,8 @@ changePasswordForm.addEventListener("submit", function(e){
         message.textContent = "خطأ في عملية إعادة تعيين كلمة المرور!";
         message.style.backgroundColor = "red";
         message.style.color = "white";
-    };
+        return;
+    }
     
     // Get users from localStorage
     const users = JSON.parse(localStorage.getItem('users')) || [];
@@ -282,7 +294,8 @@ changePasswordForm.addEventListener("submit", function(e){
         message.textContent = "المستخدم غير موجود!";
         message.style.backgroundColor = "red";
         message.style.color = "white";
-    };
+        return;
+    }
     
     // Update the user's password
     users[userIndex].password = changePasswordInput.value;
@@ -306,34 +319,4 @@ changePasswordForm.addEventListener("submit", function(e){
     setTimeout(() => {
         window.location.href = 'sample_login.html';
     }, 2000);
-});
-
-resendCodeBtn.addEventListener("click", function(e){
-  
-  e.preventDefault();
-  
-  const verificationCode = Math.floor(100000 + Math.random() * 900000);
-  sessionStorage.setItem('verificationCode', verificationCode);
-  
-  console.log("Resent verification code", verificationCode);
-  
-  const templateParams = {
-    verification_code: verificationCode,
-    to_email: emailInput.value
-    
-  };
-  
-  emailjs.sendForm("service_0ias34f", "template_z6biz19", this)
-  .then(() => {
-    
-    alert("تم إرسال رمز التأكيد إليك. رجاءاً تفقد بريدك الإلكتروني.");
-    
-  })
-  .catch((error) => {
-    
-    console.error("EmailJS Error:",error);
-    alert('فشل الإرسال! رجاءاً إضغط على "إعادة الإرسال".');
-    
-  });
-  
 });
