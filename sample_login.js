@@ -255,6 +255,7 @@ forgotPasswordForm.addEventListener("submit", function(e) {
     
     console.log("Redirected to changePasswordForm");
     forgotPasswordForm.style.display = 'none';
+    loginForm.style.display = 'none';
     changePasswordForm.style.display = 'block';
     message.style.display = 'none';
 });
