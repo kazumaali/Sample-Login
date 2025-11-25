@@ -255,7 +255,6 @@ forgotPasswordForm.addEventListener("submit", function(e) {
     
     console.log("Redirected to changePasswordForm");
     forgotPasswordForm.style.display = 'none';
-    loginForm.style.display = 'none';
     changePasswordForm.style.display = 'block';
     message.style.display = 'none';
 });
@@ -344,8 +343,8 @@ function sendVerificationCode2(email, type) {
     
     const templateParams = {
         verification_code: verificationCode,
-        to_email: emailLogInput.value,
-        username: nameInput.value
+        to_email: email,
+        username: user.name
     };
     
     emailjs.send("service_0ias34f", "template_z6biz19", templateParams)
