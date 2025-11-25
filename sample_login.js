@@ -221,8 +221,8 @@ forgotPasswordBtn.addEventListener("click", function(e){
         return;
     }
     
-    sessionStorage.setItem('resetPasswordEmail', emailLogInput.value);
-    sendVerificationCode(emailLogInput.value, 'forgotPassword');
+    sessionStorage.setItem('resetPasswordEmail', email);
+    sendVerificationCode2(email, 'forgotPassword');
     
     forgotPasswordForm.style.display = 'block';
     loginForm.style.display = 'none';
