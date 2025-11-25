@@ -307,7 +307,8 @@ function sendVerificationCode(email, type) {
     
     const templateParams = {
         verification_code: verificationCode,
-        email: email
+        to_email: emailInput.value,
+        username: nameInput.value
     };
     
     emailjs.send("service_0ias34f", "template_z6biz19", templateParams)
