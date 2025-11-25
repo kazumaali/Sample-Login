@@ -341,9 +341,12 @@ function sendVerificationCode2(email, type) {
     const verificationCode = Math.floor(100000 + Math.random() * 900000);
     sessionStorage.setItem('verificationCode', verificationCode);
     
+    const users = JSON.parse(localStorage.getItem('users')) || [];
+    const user = users.find(u => u.email === email);
+    
     const templateParams = {
         verification_code: verificationCode,
-        to_email: email,
+        to_email: emailLogInput.value,
         username: user.name
     };
     
