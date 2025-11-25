@@ -18,9 +18,26 @@ const forgotPasswordForm = document.getElementById("forgotPasswordForm");
 const forgotPasswordInput = document.getElementById("forgotPasswordInput");  
 const changePasswordForm = document.getElementById("changePasswordForm");
 const changePasswordInput = document.getElementById("changePasswordInput");
+const resendForgotPasswordCodeBtn = document.getElementById("resendForgotPasswordCodeBtn");
 
+// Form switching
+signupRedirectBtn.addEventListener("click", function(e) {
+    e.preventDefault();
+    signupForm.style.display = 'block';
+    loginForm.style.display = 'none';
+    message.textContent = '';
+});
+
+loginRedirectBtn.addEventListener ("click", function(e) {
+    e.preventDefault();
+    signupForm.style.display = 'none';
+    loginForm.style.display = 'block';
+    verificationForm.style.display = 'none';
+    message.textContent = '';
+});
+
+// Login functionality
 loginForm.addEventListener("submit", function(e) {
-    
     e.preventDefault();
     
     const users = JSON.parse(localStorage.getItem('users')) || [];
@@ -43,56 +60,24 @@ loginForm.addEventListener("submit", function(e) {
     };
     
     console.log('Login Successfully');
-        message.textContent = 'تم تسجيل الدخول بنجاح';
-        message.style.backgroundColor = 'green';
-        message.style.color = 'white';
+    message.textContent = 'تم تسجيل الدخول بنجاح';
+    message.style.backgroundColor = 'green';
+    message.style.color = 'white';
     
     sessionStorage.setItem('currentUser', JSON.stringify(user));
     
     setTimeout(() => {
-            window.location.href = 'index.html';
-        }, 2000);
-    
+        window.location.href = 'index.html';
+    }, 2000);
 });
 
-signupRedirectBtn.addEventListener("click", function(e) {
-  signupForm.style.display = 'block';
-  loginForm.style.display = 'none';
-  
-});
-
-forgotPasswordBtn.addEventListener("click", function(e){
-  sessionStorage.setItem('resetPasswordEmail', emailLogInput.value);
-  const verificationCode = Math.floor(100000 + Math.random() * 900000);
-  sessionStorage.setItem('verificationCode', verificationCode);
-  const templateParams = {
-    verification_code: verificationCode
-    
-  };
-  emailjs.sendForm("service_0ias34f", "template_z6biz19", this)
-  .then(() => {
-    
-    alert("تم إرسال رمز التأكيد إليك. رجاءاً تفقد بريدك الإلكتروني.");
-    
-  })
-  .catch((error) => {
-    console.error(error);
-    alert('فشل الإرسال! رجاءاً إضغط على "إعادة الإرسال".')
-    
-  });
-  
-  forgotPasswordForm.style.display = 'block';
-  loginForm.style.display = 'none';
-  
-});
-
+// Signup functionality
 signupForm.addEventListener("submit", function(e) {
-    
     e.preventDefault();
     
     let hasError = false;
     
-    if (!/^[A-Za-z0-9_$]+$/.test(nameInput.value)) {
+    if (!/^[A-Za-z0-9_]{3,16}$/.test(nameInput.value)) {
         console.error("Invalid Username!");
         hasError = true;
         message.textContent = "صيغة خاطئة! على إسم المستخدم أن يحتوي على حروف لاتينية، أو الأرقام من 1-9 ، أو _، أو $. وأن يحتوي بين 3 إلى 16 عنصرا."
@@ -124,38 +109,37 @@ signupForm.addEventListener("submit", function(e) {
         message.style.color = "white";
     }
 
-  if(!hasError){
-      
-      const verificationCode = Math.floor(100000 + Math.random() * 900000);
-      sessionStorage.setItem('verificationCode', verificationCode);
-      
-      const templateParams = {
-          verification_code: verificationCode
-      };
-      
-      emailjs.sendForm("service_0ias34f", "template_z6biz19", this)
-    .then(() => {
-      alert("تم إرسال رمز التأكيد إليك. رجاءاً تفقد بريدك الإلكتروني.");
-    })
-    .catch((error) => {
-      console.error(error);
-      alert('فشل الإرسال! رجاءاً إضغط على "إعادة الإرسال".')
-    });
-      
-      verificationForm.style.display = 'block';
-      signupForm.style.display = 'none';
-  }
-    
+    // Check if user already exists
+    const existingUsers = JSON.parse(localStorage.getItem('users')) || [];
+    const userExists = existingUsers.some(user => user.email === emailInput.value);
+    if(userExists){
+        console.error('User Already Exists!');
+        message.textContent = 'المستخدم موجود بالفعل!';
+        message.style.backgroundColor = 'red';
+        message.style.color = 'white';
+        return;
+    }
+
+    if(!hasError){
+        // Store temporary user data
+        const tempUserData = {
+            name: nameInput.value,
+            email: emailInput.value,
+            password: passwordInput.value
+        };
+        sessionStorage.setItem('tempUserData', JSON.stringify(tempUserData));
+        
+        // Generate and send verification code
+        sendVerificationCode(emailInput.value, 'signup');
+        
+        verificationForm.style.display = 'block';
+        signupForm.style.display = 'none';
+        message.textContent = '';
+    }
 });
 
-loginRedirectBtn.addEventListener ("click", function(e) {
-  signupForm.style.display = 'none';
-  loginForm.style.display = 'block';
-  
-});
-
+// Verification functionality
 verificationForm.addEventListener("submit", function(e){
-    
     e.preventDefault();
     
     const storedCode = sessionStorage.getItem('verificationCode');
@@ -166,65 +150,22 @@ verificationForm.addEventListener("submit", function(e){
         message.style.backgroundColor = 'red';
         message.style.color = 'white';
     } else {
-        
-        const userData = {
-            name: nameInput.value,
-            email: emailInput.value,
-            password: passwordInput.value
-        };
+        const userData = JSON.parse(sessionStorage.getItem('tempUserData'));
         
         const existingUsers = JSON.parse(localStorage.getItem('users')) || [];
-        
-        const userExists = existingUsers.some(user => user.email === userData.email);
-        
-        if(userExists){
-            console.error('User Already Exists!');
-            message.textContent = 'المستخدم موجود بالفعل!';
-            message.style.backgroundColor = 'red';
-            message.style.color = 'white';
-            return;
-        };
-        
         existingUsers.push(userData);
         
         localStorage.setItem('users', JSON.stringify(existingUsers));
         
+        // Clean up
         sessionStorage.removeItem('verificationCode');
+        sessionStorage.removeItem('tempUserData');
         
         nameInput.value = '';
         emailInput.value = '';
         passwordInput.value = '';
         repeatPasswordInput.value = '';
         verificationInput.value = '';
-        
-        resendCodeBtn.addEventListener("click", function(e){
-          
-          const verificationCode = Math.floor(100000 + Math.random() * 900000);
-          
-          sessionStorage.setItem('verificationCode', verificationCode);
-          
-          const templateParams = {
-            verification_code: verificationCode
-            
-          };
-          
-          emailjs.sendForm("service_0ias34f", "template_z6biz19", this)
-          
-          .then(() => {
-            
-            alert("تم إرسال رمز التأكيد إليك. رجاءاً تفقد بريدك الإلكتروني.");
-            
-          })
-          
-          .catch((error) => {
-            
-            console.error(error);
-            
-            alert('فشل الإرسال! رجاءاً إضغط على "إعادة الإرسال".')
-            
-          });
-          
-        });
         
         console.log('Account Created Successfully🎉');
         message.textContent = 'تم إنشاء الحساب بنجاح🎉';
@@ -235,31 +176,78 @@ verificationForm.addEventListener("submit", function(e){
             window.location.href = 'index.html';
         }, 2000);
     }
-    
 });
 
+// Resend code for signup
+resendCodeBtn.addEventListener("click", function(e){
+    e.preventDefault();
+    const tempUserData = JSON.parse(sessionStorage.getItem('tempUserData'));
+    if (tempUserData && tempUserData.email) {
+        sendVerificationCode(tempUserData.email, 'signup');
+    }
+});
+
+// Forgot password functionality
+forgotPasswordBtn.addEventListener("click", function(e){
+    e.preventDefault();
+    
+    const email = emailLogInput.value;
+    if (!email) {
+        message.textContent = 'الرجاء إدخال البريد الإلكتروني أولاً!';
+        message.style.backgroundColor = 'red';
+        message.style.color = 'white';
+        return;
+    }
+    
+    // Check if user exists
+    const users = JSON.parse(localStorage.getItem('users')) || [];
+    const user = users.find(u => u.email === email);
+    
+    if(!user){
+        message.textContent = "لا وجود لهذا المستخدم!"
+        message.style.backgroundColor = "red";
+        message.style.color = "white";
+        return;
+    }
+    
+    sessionStorage.setItem('resetPasswordEmail', email);
+    sendVerificationCode(email, 'forgotPassword');
+    
+    forgotPasswordForm.style.display = 'block';
+    loginForm.style.display = 'none';
+    message.textContent = '';
+});
+
+// Resend code for forgot password
+resendForgotPasswordCodeBtn.addEventListener("click", function(e){
+    e.preventDefault();
+    const email = sessionStorage.getItem('resetPasswordEmail');
+    if (email) {
+        sendVerificationCode(email, 'forgotPassword');
+    }
+});
+
+// Forgot password verification
 forgotPasswordForm.addEventListener("submit", function(e) {
-  
-  e.preventDefault();
-  
-  const storedCode = sessionStorage.getItem('verificationCode');
-  
-  if(forgotPasswordInput.value !== storedCode) {
+    e.preventDefault();
     
-    console.error("Invalid Verification Code!");
-    message.textContent = "رمز تأكيد خاطئ!";
-    message.style.backgroundColor = "red";
-    message.style.color = "white";
+    const storedCode = sessionStorage.getItem('verificationCode');
     
-  }
-  
-  console.log("Redirected to changePasswordForm");
-  
-  forgotPasswordForm.style.display = 'none';
-  changePasswordForm.style.display = 'block';
-  
+    if(forgotPasswordInput.value !== storedCode) {
+        console.error("Invalid Verification Code!");
+        message.textContent = "رمز تأكيد خاطئ!";
+        message.style.backgroundColor = "red";
+        message.style.color = "white";
+        return;
+    }
+    
+    console.log("Redirected to changePasswordForm");
+    forgotPasswordForm.style.display = 'none';
+    changePasswordForm.style.display = 'block';
+    message.textContent = '';
 });
 
+// Change password functionality
 changePasswordForm.addEventListener("submit", function(e){
     e.preventDefault();
     
@@ -271,8 +259,6 @@ changePasswordForm.addEventListener("submit", function(e){
         return;
     }
     
-    // Get the current user's email (you'll need to store this somewhere)
-    // For forgot password flow, you might need to store the email in sessionStorage
     const userEmail = sessionStorage.getItem('resetPasswordEmail');
     
     if (!userEmail) {
@@ -283,10 +269,7 @@ changePasswordForm.addEventListener("submit", function(e){
         return;
     }
     
-    // Get users from localStorage
     const users = JSON.parse(localStorage.getItem('users')) || [];
-    
-    // Find the user to update
     const userIndex = users.findIndex(user => user.email === userEmail);
     
     if (userIndex === -1) {
@@ -297,17 +280,12 @@ changePasswordForm.addEventListener("submit", function(e){
         return;
     }
     
-    // Update the user's password
     users[userIndex].password = changePasswordInput.value;
-    
-    // Save back to localStorage
     localStorage.setItem('users', JSON.stringify(users));
     
-    // Clear the verification code and email from sessionStorage
     sessionStorage.removeItem('verificationCode');
     sessionStorage.removeItem('resetPasswordEmail');
     
-    // Clear the input field
     changePasswordInput.value = '';
     
     console.log("Password changed successfully!");
@@ -315,8 +293,29 @@ changePasswordForm.addEventListener("submit", function(e){
     message.style.backgroundColor = "green";
     message.style.color = "white";
     
-    // Redirect to login page after successful password change
     setTimeout(() => {
-        window.location.href = 'sample_login.html';
+        changePasswordForm.style.display = 'none';
+        loginForm.style.display = 'block';
+        message.textContent = '';
     }, 2000);
 });
+
+// Helper function to send verification code
+function sendVerificationCode(email, type) {
+    const verificationCode = Math.floor(100000 + Math.random() * 900000);
+    sessionStorage.setItem('verificationCode', verificationCode);
+    
+    const templateParams = {
+        verification_code: verificationCode,
+        email: email
+    };
+    
+    emailjs.send("service_0ias34f", "template_z6biz19", templateParams)
+    .then(() => {
+        alert("تم إرسال رمز التأكيد إليك. رجاءاً تفقد بريدك الإلكتروني.");
+    })
+    .catch((error) => {
+        console.error(error);
+        alert('فشل الإرسال! رجاءاً إضغط على "إعادة الإرسال".');
+    });
+}
