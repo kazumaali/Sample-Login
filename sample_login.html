@@ -16,9 +16,9 @@
     
     <script type="text/javascript" src="sample_login.js" defer></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-    <script>
+    <script type="text/javascript">
     (function(){
-        emailjs.init("d3oDpvpHsE4_0H-dq"); // ← Replace with your Public Key
+        emailjs.init("d3oDpvpHsE4_0H-dq");
   })();
     </script>
 
@@ -40,7 +40,7 @@
         <input type="password" id="passwordInput" required placeholder="مثال: 123456" pattern="[A-Za-z0-9$]{6, 16}">
         <label for="repeatPasswordInput">رجاءاً أكِّد كلمة مرورك: </label>
         <input type="password" id="repeatPasswordInput" required>
-        <button type="submit">إنشاء حساب</button> <div>لديك حساب بالفعل؟<button id="loginRedirectBtn">سجِّل الدخول</button></div>
+        <button type="submit" class="send-code">إنشاء حساب</button> <div>لديك حساب بالفعل؟<button id="loginRedirectBtn">سجِّل الدخول</button></div>
     </form>
     
     
@@ -51,14 +51,14 @@
         <label for="passwordLogInput">رجاءاً أدخل كلمة مرورك: </label>
         <input type="password" id="passwordLogInput" required>
         <button type="submit" >تسجيل الدخول</button> <div>أنت جديد هنا؟ <button id="signupRedirectBtn">أنشئ حساباً</button></div>
-        <div>هل نسيت كلمة مرورك؟<button id="forgotPasswordBtn">إضغط هنا</button></div>
+        <div>هل نسيت كلمة مرورك؟<button id="forgotPasswordBtn" class="send-code">إضغط هنا</button></div>
     </form>
     
     
     
     <form id="verificationForm" class="verification-form">
         <input type="number" id="verificationInput" placeholder="رجاءاً أدخل رمز التأكيد">
-        <button id="resendCodeBtn">إعادة الإرسال</button>
+        <button id="resendCodeBtn" class="send-code">إعادة الإرسال</button>
         <button type="submit">إنشاء حساب</button>
     </form>
     
