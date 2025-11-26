@@ -61,6 +61,7 @@ loginForm.addEventListener("submit", function(e) {
         return;
     };
     
+    logoutBtn.innerHTML = 'تسجيل الخروج'; 
     console.log('Login Successfully');
     message.style.display = 'block';
     message.textContent = 'تم تسجيل الدخول بنجاح';
@@ -176,6 +177,8 @@ verificationForm.addEventListener("submit", function(e){
         repeatPasswordInput.value = '';
         verificationInput.value = '';
         
+        
+        logoutBtn.innerHTML = 'تسجيل الخروج';
         console.log('Account Created Successfully🎉');
         message.style.display = 'block';
         message.textContent = 'تم إنشاء الحساب بنجاح🎉';
@@ -361,32 +364,23 @@ function sendVerificationCode2(email, type) {
     });
 }
 
-function updateLogoutButton() {
-  if (logoutBtn) {
-    const currentUser = sessionStorage.getItem('currentUser');
-    if (currentUser) {
-      logoutBtn.innerHTML = '<a href="#">تسجيل الخروج</a>';
-      
-    } else if(!currentUser) {
-      logoutBtn.innerHTML = '<a href="sample_login.html">تسجيل الدخول</a>';
-      
-    };
-    
-  };
-};
-
 logoutBtn.addEventListener('click', function(e) {
+  
+  e.preventDefault();
   const currentUser = sessionStorage.getItem('currentUser');
   if (currentUser) {
-    e.preventDefault();
     sessionStorage.removeItem('currentUser');
-    logoutBtn.innerHTML = '<a href="sample_login.html">تسجيل الدخول</a>';
-    
+    logoutBtn.innerHTML = 'تسجيل الدخول';
     console.log('User logged out successfully');
     message.style.display = 'block';
     message.textContent = 'تم تسجيل الخروج بنجاح';
     message.style.backgroundColor = 'green';
     message.style.color = 'white';
+    
+  } else {
+    
+    window.location.href = "sample_login.html";
+    console.log('User Trying to Log In');
     
     setTimeout(() => {
       message.style.display = 'none';
@@ -394,11 +388,5 @@ logoutBtn.addEventListener('click', function(e) {
     }, 2000);
     
   };
-});
-
-
-// Call this function when the page loads to set the correct button state
-document.addEventListener('DOMContentLoaded', function() {
-  updateLogoutButton();
   
 });
