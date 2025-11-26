@@ -367,13 +367,13 @@ function updateLogoutButton() {
     if (currentUser) {
       logoutBtn.innerHTML = '<a href="#">تسجيل الخروج</a>';
       
-    } else {
+    } else if(!currentUser) {
       logoutBtn.innerHTML = '<a href="sample_login.html">تسجيل الدخول</a>';
       
-    }
+    };
     
-  }
-}
+  };
+};
 
 logoutBtn.addEventListener('click', function(e) {
   const currentUser = sessionStorage.getItem('currentUser');
