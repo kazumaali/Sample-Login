@@ -1,2 +1,1 @@
-It still doesn't work properly
-I am working on it
+Now, it's ready to use
