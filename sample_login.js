@@ -19,7 +19,6 @@ const forgotPasswordInput = document.getElementById("forgotPasswordInput");
 const changePasswordForm = document.getElementById("changePasswordForm");
 const changePasswordInput = document.getElementById("changePasswordInput");
 const resendForgotPasswordCodeBtn = document.getElementById("resendForgotPasswordCodeBtn");
-const logoutBtn = document.getElementById("logoutBtn");
 
 signupRedirectBtn.addEventListener("click", function(e) {
     e.preventDefault();
@@ -350,48 +349,3 @@ function sendVerificationCode2(email, type) {
         alert('فشل الإرسال! رجاءاً إضغط على "إعادة الإرسال".');
     });
 }
-
-function updateLogoutButton() {
-    if (logoutBtn) {
-        const currentUser = sessionStorage.getItem('currentUser');
-        if (currentUser) {
-            
-            logoutBtn.innerHTML = '<a href="#">تسجيل الخروج</a>';
-        } else {
-            
-            logoutBtn.innerHTML = '<a href="sample_login.html">تسجيل الدخول</a>';
-        }
-    }
-}
-
-if (logoutBtn) {
-    logoutBtn.addEventListener('click', function(e) {
-        const currentUser = sessionStorage.getItem('currentUser');
-        
-        if (currentUser) {
-            
-            e.preventDefault();
-            sessionStorage.removeItem('currentUser');
-            
-            logoutBtn.innerHTML = '<a href="sample_login.html">تسجيل الدخول</a>';
-            
-            console.log('User logged out successfully');
-            
-            if (message) {
-                message.style.display = 'block';
-                message.textContent = 'تم تسجيل الخروج بنجاح';
-                message.style.backgroundColor = 'green';
-                message.style.color = 'white';
-                
-                setTimeout(() => {
-                    message.style.display = 'none';
-                }, 2000);
-            }
-        }
-        
-    });
-}
-
-document.addEventListener('DOMContentLoaded', function() {
-    updateLogoutButton();
-});
