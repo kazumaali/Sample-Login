@@ -20,7 +20,6 @@ const changePasswordForm = document.getElementById("changePasswordForm");
 const changePasswordInput = document.getElementById("changePasswordInput");
 const resendForgotPasswordCodeBtn = document.getElementById("resendForgotPasswordCodeBtn");
 
-// Form switching
 signupRedirectBtn.addEventListener("click", function(e) {
     e.preventDefault();
     signupForm.style.display = 'block';
@@ -35,7 +34,6 @@ loginRedirectBtn.addEventListener ("click", function(e) {
     message.style.display = 'none';
 });
 
-// Login functionality
 loginForm.addEventListener("submit", function(e) {
     e.preventDefault();
     
@@ -73,7 +71,6 @@ loginForm.addEventListener("submit", function(e) {
     }, 2000);
 });
 
-// Signup functionality
 signupForm.addEventListener("submit", function(e) {
     e.preventDefault();
     
@@ -145,7 +142,6 @@ signupForm.addEventListener("submit", function(e) {
     }
 });
 
-// Verification functionality
 verificationForm.addEventListener("submit", function(e){
     e.preventDefault();
     
@@ -187,7 +183,6 @@ verificationForm.addEventListener("submit", function(e){
     }
 });
 
-// Resend code for signup
 resendCodeBtn.addEventListener("click", function(e){
     e.preventDefault();
     const tempUserData = JSON.parse(sessionStorage.getItem('tempUserData'));
@@ -196,7 +191,6 @@ resendCodeBtn.addEventListener("click", function(e){
     }
 });
 
-// Forgot password functionality
 forgotPasswordBtn.addEventListener("click", function(e){
     e.preventDefault();
     
@@ -229,7 +223,6 @@ forgotPasswordBtn.addEventListener("click", function(e){
     message.style.display = 'none';
 });
 
-// Resend code for forgot password
 resendForgotPasswordCodeBtn.addEventListener("click", function(e){
     e.preventDefault();
     const email = sessionStorage.getItem('resetPasswordEmail');
@@ -238,7 +231,6 @@ resendForgotPasswordCodeBtn.addEventListener("click", function(e){
     }
 });
 
-// Forgot password verification
 forgotPasswordForm.addEventListener("submit", function(e) {
     e.preventDefault();
     
@@ -259,7 +251,6 @@ forgotPasswordForm.addEventListener("submit", function(e) {
     message.style.display = 'none';
 });
 
-// Change password functionality
 changePasswordForm.addEventListener("submit", function(e){
     e.preventDefault();
     
@@ -316,7 +307,6 @@ changePasswordForm.addEventListener("submit", function(e){
     }, 2000);
 });
 
-// Helper function to send verification code
 function sendVerificationCode(email, type) {
     const verificationCode = Math.floor(100000 + Math.random() * 900000);
     sessionStorage.setItem('verificationCode', verificationCode);
