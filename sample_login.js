@@ -370,7 +370,7 @@ logoutBtn.addEventListener('click', function(e) {
   const currentUser = sessionStorage.getItem('currentUser');
   if (currentUser) {
     sessionStorage.removeItem('currentUser');
-    logoutBtn.innerHTML = 'تسجيل الدخول';
+    logoutBtn.innerHTML = '<a href="sample_login.html">تسجيل الدخول<a>';
     console.log('User logged out successfully');
     message.style.display = 'block';
     message.textContent = 'تم تسجيل الخروج بنجاح';
