@@ -161,6 +161,8 @@ verificationForm.addEventListener("submit", function(e){
         
         localStorage.setItem('users', JSON.stringify(existingUsers));
         
+        sessionStorage.setItem('currentUser', JSON.stringify(userData));
+        
         // Clean up
         sessionStorage.removeItem('verificationCode');
         sessionStorage.removeItem('tempUserData');
