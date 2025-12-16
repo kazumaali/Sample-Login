@@ -401,4 +401,5 @@ with app.app_context():
 if __name__ == '__main__':
   if os.path.exists(db_path):
     os.chmod(db_path, 0o600)
-  app.run(debug=True, port=8080, host='0.0.0.0')
+  port = int(os.environ.get("PORT", 8080))
+  app.run(debug=True, port=port, host='0.0.0.0')
